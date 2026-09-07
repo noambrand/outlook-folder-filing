@@ -10,7 +10,7 @@ labels: the mail stays in one pile and gains tags. Outlook **moves**: a folder t
 someone built it over years, and the work is putting mail into it.
 
 Run against a real mailbox this reduced an inbox from **565 messages to 5 in a day** and Sent Items
-from **507 to 112**, and left rules behind so the inbox stays that way.
+from **507 to 8**, and left rules behind so the inbox stays that way.
 
 ## The one thing to understand before starting
 
@@ -142,7 +142,8 @@ So the order changes for sent mail:
 4. Only last, a colleague, and only on the To line, never on Cc alone.
 
 Sent Items in the source run went from 507 messages to 112 that way, with the IT folder taking the
-19 that really were IT.
+19 that really were IT. Reading the bodies of those 112, exactly as in step 3, placed 103 more and
+left 8: three passwords and five threads for projects with no folder.
 
 Two more things surface here that the inbox pass never exposed. **Substring matching bites**: a
 keyword for one town matched a longer town name that contains it. A keyword should only count when
@@ -168,6 +169,12 @@ When a keyword misses, check the spelling before blaming the logic.
 `mailFolderId`, and both `move-mail-message` and `create-mail-rule` want their payload nested under
 `body`. A wrong shape returns a validation error for every message and moves nothing, which looks
 exactly like a permissions problem and is not.
+
+**A move that reports failure may have happened anyway.** Some item types — meeting acceptances and
+other calendar responses — are not served by the plain message endpoint, so the move call comes back
+without an id. In the source run seven such moves were logged as failures and two of them had in fact
+moved, to the wrong folder. Never trust the return value alone: after a batch, list the destination
+folders and confirm the subjects are where you put them.
 
 **Exchange caps total rule size**, not count, at 256 KB. Dozens of rules are fine; hundreds of
 one-sender rules are not. Group senders by destination folder, one rule per folder with a list.

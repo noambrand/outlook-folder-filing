@@ -4,7 +4,7 @@ A Claude skill for sorting an Outlook or Microsoft 365 inbox into the folders th
 and leaving inbox rules behind so it stays sorted.
 
 Run against a real 20-year work mailbox it took the inbox from **565 messages to 5 in a day** and
-Sent Items from **507 to 112**, using a folder tree of 62 folders that nobody had ever documented.
+Sent Items from **507 to 8**, using a folder tree of 62 folders that nobody had ever documented.
 
 **The premise:** you do not design the folders. The owner already answered every classification
 question by filing thousands of messages over years. Read the answer key, do not rewrite it.
