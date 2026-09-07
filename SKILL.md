@@ -1,6 +1,6 @@
 ---
 name: outlook-folder-filing
-description: Use when someone wants their Outlook or Microsoft 365 inbox sorted into folders, or wants inbox rules built so it stays sorted. Installs a Graph MCP server, learns the person's own filing habits from the folders they already have, and files the backlog. Not for Gmail, which labels instead of moving.
+description: Use when someone wants their Outlook or Microsoft 365 inbox or Sent Items sorted into folders, or wants inbox rules built so it stays sorted. Installs a Graph MCP server, learns the person's own filing habits from the folders they already have, and files the backlog. Not for Gmail, which labels instead of moving.
 ---
 
 # Filing an Outlook inbox into the folders that are already there
@@ -9,8 +9,8 @@ This is the Outlook counterpart to `gmail-label-cleanup`, and it is **not the sa
 labels: the mail stays in one pile and gains tags. Outlook **moves**: a folder tree already exists,
 someone built it over years, and the work is putting mail into it.
 
-Run against a real mailbox this reduced an inbox from **565 messages to 5 in a day**, and left rules
-behind so it stays that way.
+Run against a real mailbox this reduced an inbox from **565 messages to 5 in a day** and Sent Items
+from **507 to 112**, and left rules behind so the inbox stays that way.
 
 ## The one thing to understand before starting
 
@@ -121,6 +121,34 @@ approved the rest in a sentence.
 That correction rate is the argument for doing the reading properly rather than asking the owner to
 classify. They asked for exactly this: *"you can do a fuller classification instead of asking me to
 tell you how to classify."*
+
+### 5. Sent Items is the same job with the signals inverted
+
+The inbox is half the mail. Sent Items holds the other half of every thread, and filing it needs one
+change that is easy to get wrong.
+
+**In Sent Items the sender is always the owner, so every sender signal has to be read off the
+recipients.** That part is obvious. The part that is not: **a colleague on the To or Cc line is not
+what the message is about.** People copy their IT team and their office on project threads
+constantly. In the source run, applying the colleague rules in their inbox order sent 92 project
+threads into the IT folder and 71 into the office folder, including a public tender and a database
+conversion. The subject had said plainly where each belonged.
+
+So the order changes for sent mail:
+
+1. The correspondent rules the owner gave by hand — these still beat the subject.
+2. The subject. In sent mail this is the honest signal.
+3. An outside correspondent whose mail they always file in one place.
+4. Only last, a colleague, and only on the To line, never on Cc alone.
+
+Sent Items in the source run went from 507 messages to 112 that way, with the IT folder taking the
+19 that really were IT.
+
+Two more things surface here that the inbox pass never exposed. **Substring matching bites**: a
+keyword for one town matched a longer town name that contains it. A keyword should only count when
+the word actually ends there; in Hebrew, prefixes attach at the front, so check the end of the word
+and not the start. And **people spell their own projects several ways in their own subjects** — three
+new spellings turned up in Sent Items for folders whose inbox rules had worked fine for months.
 
 ## Traps, each of which cost real time
 
